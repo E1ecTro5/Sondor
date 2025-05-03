@@ -27,7 +27,11 @@ namespace SondorApp
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
-                    Console.WriteLine("Item: " + line.Split(";")[0] + " | " + "Count: " + line.Split(";")[1]);
+
+                    string itemName = line.Split(";")[0];
+                    string itemCount = line.Split(";")[1];
+
+                    Console.WriteLine("Item: " + itemName + " | " + "Count: " + itemCount);
                 }
             }
         }
