@@ -17,6 +17,8 @@
             DataManager.AddItem(new Item("Appa", 23));
             DataManager.AddItem(new Item("ororo", 23));
 
+            DataManager.DeleteItem("Appa");
+
             DataManager.GetData();
         }
     }

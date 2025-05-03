@@ -27,8 +27,13 @@ namespace SondorApp
                     string itemName = line.Split(";")[0];
                     int itemCount = Convert.ToInt32(line.Split(";")[1]); // Исключения не обработал тут, при AddItem проверять буду наверное..
 
+                    //check for IsDeleting
+                    if (line.Split(";")[2] == "True")
+                    {
+                        loaded.Remove(loaded.Where(x => x.Name == line.Split(";")[0]).First());
+                    }
                     //В файле повторяться могут предметы, поэтому тут их объединять буду; файл как историю добавления/удаления можно использовать
-                    if (loaded.Select(x => x.Name).Contains(itemName))
+                    else if (loaded.Select(x => x.Name).Contains(itemName))
                     {
                         Item previous = loaded.Where(x => x.Name == itemName).First();
                         Item change = new Item(itemName, previous.Count + itemCount);
@@ -62,7 +67,7 @@ namespace SondorApp
             //Если новый
             using (StreamWriter writer = new(path, true))
             {
-                writer.WriteLine($"{item.Name};{item.Count}"); //Здесь ; используется как separator
+                writer.WriteLine($"{item.Name};{item.Count};{item.IsDeleting}"); //Здесь ; используется как separator
                 if(added)
                     Console.WriteLine($"Добавлено {item.Count}шт к {item.Name}");
                 else
@@ -79,6 +84,20 @@ namespace SondorApp
             foreach(Item item in items)
             {
                 Console.WriteLine($"{item.Name} в количестве: {item.Count}шт");
+            }
+        }
+
+        public static void DeleteItem(string itemName)
+        {
+            //LoadItems();
+
+            Item target = items.Where(x => x.Name == itemName).First();
+            target.IsDeleting = true;
+            items.Remove(target);
+
+            using (StreamWriter writer = new(path, true))
+            {
+                writer.WriteLine($"{target.Name};{target.Count};{target.IsDeleting}");
             }
         }
 
