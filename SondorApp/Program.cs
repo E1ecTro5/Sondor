@@ -4,7 +4,10 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(DataManager.DataLine());
+            //DataManager.AddItem(new Item("First", 20));
+            //DataManager.AddItem(new Item("Second", 14));
+
+            DataManager.GetData();
         }
     }
 }
