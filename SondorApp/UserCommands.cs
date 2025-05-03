@@ -46,6 +46,12 @@ namespace SondorApp
                 return null;
             }
 
+            if (name.Contains(";"))
+            {
+                ConsoleLog.ErrorMessage("Нельзя указывать символ ';'!");
+                return null;
+            }
+
             int count = -1;
             try
             {
