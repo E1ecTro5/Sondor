@@ -4,6 +4,10 @@
     {
         static void Main(string[] args)
         {
+            ConsoleLog.SystemLog("Starting program..\n");
+            ConsoleLog.LoadingLog();
+            ConsoleLog.Welcome();
+
             DataManager.LoadItems();
 
             DataManager.DeleteAllData();
