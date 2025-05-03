@@ -20,7 +20,9 @@ namespace SondorApp
             Console.WriteLine("> 0 - получить инфрмацию о всех продуктах на складе.");
             Console.WriteLine("> 1 - добавить элементы на склад.");
             Console.WriteLine("> 2 - взять элементы со склада.");
-            Console.WriteLine("> 3 - обновить данные.");
+            Console.WriteLine("> 3 - удалить элемент со склада.");
+            Console.WriteLine("> 4 - удалить все данные.");
+            Console.WriteLine("> 5 - обновить данные.");
             Console.WriteLine("> quit - выйти.");
             Console.WriteLine();
 
@@ -38,7 +40,7 @@ namespace SondorApp
             for (int i = 0; i < 3; i++)
             {
                 Console.WriteLine("Loading" + new string('.', i));
-                Thread.Sleep(700);
+                Thread.Sleep(100);
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -51,6 +53,13 @@ namespace SondorApp
         public static void SystemLog(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public static void ItemMessageLog(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }

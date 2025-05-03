@@ -68,10 +68,10 @@ namespace SondorApp
             using (StreamWriter writer = new(path, true))
             {
                 writer.WriteLine($"{item.Name};{item.Count};{item.IsDeleting}"); //Здесь ; используется как separator
-                if(added)
-                    Console.WriteLine($"Добавлено {item.Count}шт к {item.Name}");
+                if (added)
+                    ConsoleLog.ItemMessageLog($"Добавлено {item.Count}шт к {item.Name}");
                 else
-                    Console.WriteLine($"{item.Name} добавлен в количестве {item.Count}шт");
+                    ConsoleLog.ItemMessageLog($"{item.Name} добавлен в количестве {item.Count}шт");
             }
 
             LoadItems();
@@ -81,10 +81,14 @@ namespace SondorApp
         {
             LoadItems();
 
-            foreach(Item item in items)
+            //Получилось костыльно, но зато работает :) И да, тут всё в хардкоде, неадеюсь не убьёте за такое))
+            Console.WriteLine("+" + new string('-', 29) + "+");
+            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " |");
+            for (int i = 0; i < items.Count; i++)
             {
-                Console.WriteLine($"{item.Name} в количестве: {item.Count}шт");
+                Console.Write("| " + items[i].Name.PadRight(16, '.') + "|" + items[i].Count.ToString().PadLeft(10, '.') + " |\n");
             }
+            Console.WriteLine("+" + new string('-', 29) + "+");
         }
 
         public static void DeleteItem(string itemName)
@@ -111,7 +115,7 @@ namespace SondorApp
                 writer.Write(string.Empty);
             }
 
-            Console.WriteLine("DELETED");
+            ConsoleLog.SystemLog("ALL DATA DELETED");
 
             LoadItems();
         }
