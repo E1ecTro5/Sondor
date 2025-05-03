@@ -8,18 +8,16 @@
             ConsoleLog.LoadingLog();
             ConsoleLog.Welcome();
 
-            DataManager.LoadItems();
+            while (true)
+            {
+                Console.Write("> ");
+                string input = Console.ReadLine();
 
-            DataManager.DeleteAllData();
+                if (input == "quit")
+                    break;
 
-            DataManager.AddItem(new Item("Kolog", 23));
-            DataManager.AddItem(new Item("ororo", 23));
-            DataManager.AddItem(new Item("Appa", 23));
-            DataManager.AddItem(new Item("ororo", 23));
-
-            DataManager.DeleteItem("Appa");
-
-            DataManager.GetData();
+                UserCommands.GetCommand(input);
+            }
         }
     }
 }

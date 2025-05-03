@@ -106,7 +106,7 @@ namespace SondorApp
         }
 
         /// <summary>
-        /// ИСКЛЮЧИТЕЛЬНО ДЛЯ ДЕБАГА
+        /// ИСКЛЮЧИТЕЛЬНО ДЛЯ ДЕБАГА; Этот метод также стирает всю историю в main.dat
         /// </summary>
         public static void DeleteAllData()
         {

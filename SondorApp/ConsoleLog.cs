@@ -27,9 +27,6 @@ namespace SondorApp
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.White;
-
-            Console.Write("> ");
-            string userInput = Console.ReadLine();
         }
 
         //Ну типо имитация загрузки, чтобы скучно не было :)
@@ -60,6 +57,24 @@ namespace SondorApp
         public static void ItemMessageLog(string message)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public static string UserInputRequest(string requestItem)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"> Пожалуйста, введите {requestItem}: ");
+            string userInput = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+
+            //Check на null сделай
+            return userInput;
+        }
+
+        public static void ErrorMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
