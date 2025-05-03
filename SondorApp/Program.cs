@@ -4,10 +4,14 @@
     {
         static void Main(string[] args)
         {
-            //DataManager.AddItem(new Item("First", 20));
-            ////DataManager.AddItem(new Item("Second", 14));
-            //DataManager.AddItem(new Item("Third", 104));
-            //DataManager.AddItem(new Item("Second", 104));
+            DataManager.LoadItems();
+
+            DataManager.DeleteAllData();
+
+            DataManager.AddItem(new Item("Kolog", 23));
+            DataManager.AddItem(new Item("ororo", 23));
+            DataManager.AddItem(new Item("Appa", 23));
+            DataManager.AddItem(new Item("ororo", 23));
 
             DataManager.GetData();
         }

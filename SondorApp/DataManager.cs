@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace SondorApp
 {
+    //Что я написал....
     static class DataManager
     {
         //Засунул всё в .dat файл рядом с .exe'шником || Можно было бы и SQLite использовать, но для маленького проекта решил проигнорировать...
         private static string path = Directory.GetCurrentDirectory() + "\\main.dat";
-        private static List<Item> items;
+        private static List<Item> items = new List<Item>();
 
         public static void LoadItems()
         {
+            List<Item> loaded = new List<Item>();
+
             using (StreamReader reader = new(path))
             {
                 while (!reader.EndOfStream)
@@ -24,13 +27,25 @@ namespace SondorApp
                     string itemName = line.Split(";")[0];
                     int itemCount = Convert.ToInt32(line.Split(";")[1]); // Исключения не обработал тут, при AddItem проверять буду наверное..
 
-                    items.Add(new Item(itemName, itemCount));
+                    //В файле повторяться могут предметы, поэтому тут их объединять буду; файл как историю добавления/удаления можно использовать
+                    if (loaded.Select(x => x.Name).Contains(itemName))
+                    {
+                        Item previous = loaded.Where(x => x.Name == itemName).First();
+                        Item change = new Item(itemName, previous.Count + itemCount);
+                        loaded[loaded.IndexOf(previous)] = change;
+                    }
+                    else
+                        loaded.Add(new Item(itemName, itemCount));
                 }
             }
+
+            items = loaded;
         }
 
         public static void AddItem(Item item)
         {
+            bool added = false;
+
             //Negative value check
             if(item.Count <= 0)
             {
@@ -41,34 +56,45 @@ namespace SondorApp
             //Existency check
             if(items.Select(x => x.Name).Contains(item.Name))
             {
-                Item previous = items.Where(x => x.Name == item.Name).First();
-                Item change = new Item(item.Name, previous.Count + item.Count);
-                items[items.IndexOf(previous)] = change;
-
-                Console.WriteLine($"Добавлено {item.Count}шт к {item.Name} | Общее количество теперь: {change.Count}");
+                added = true;
             }
 
             //Если новый
             using (StreamWriter writer = new(path, true))
             {
                 writer.WriteLine($"{item.Name};{item.Count}"); //Здесь ; используется как separator
+                if(added)
+                    Console.WriteLine($"Добавлено {item.Count}шт к {item.Name}");
+                else
+                    Console.WriteLine($"{item.Name} добавлен в количестве {item.Count}шт");
             }
+
+            LoadItems();
         }
 
         public static void GetData()
         {
-            using(StreamReader reader = new(path))
+            LoadItems();
+
+            foreach(Item item in items)
             {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-
-                    string itemName = line.Split(";")[0];
-                    string itemCount = line.Split(";")[1];
-
-                    Console.WriteLine("Item: " + itemName + " | " + "Count: " + itemCount);
-                }
+                Console.WriteLine($"{item.Name} в количестве: {item.Count}шт");
             }
+        }
+
+        /// <summary>
+        /// ИСКЛЮЧИТЕЛЬНО ДЛЯ ДЕБАГА
+        /// </summary>
+        public static void DeleteAllData()
+        {
+            using (StreamWriter writer = new(path, false))
+            {
+                writer.Write(string.Empty);
+            }
+
+            Console.WriteLine("DELETED");
+
+            LoadItems();
         }
     }
 }
