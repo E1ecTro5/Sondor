@@ -36,7 +36,22 @@ namespace SondorApp
 
         private static Item UserItemAddRequest()
         {
+            //Изначально проверка на пустое имя и неправильное кол-во было в DataManager.AddItem, однако, мне показалось, что реализация
+            //прямо тут будет более уместной. В самом AddItem я добавил проверку на null
             string name = ConsoleLog.UserInputRequest("имя продукта");
+
+            if (name is null || name == string.Empty)
+            {
+                ConsoleLog.ErrorMessage("Имя должно быть указанно!");
+                return null;
+            }
+
+            if (name.Contains(";"))
+            {
+                ConsoleLog.ErrorMessage("Нельзя указывать символ ';'!");
+                return null;
+            }
+
             int count = -1;
             try
             {
@@ -45,6 +60,12 @@ namespace SondorApp
             catch (FormatException fe)
             {
                 ConsoleLog.ErrorMessage("Введите число!");
+            }
+
+            if (count <= 0)
+            {
+                ConsoleLog.ErrorMessage("Значение должно быть больше нуля!");
+                return null;
             }
 
             Item result = new Item(name, count);

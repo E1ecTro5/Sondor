@@ -53,26 +53,21 @@ namespace SondorApp
 
         public static void AddItem(Item item)
         {
-            bool added = false;
-
-            //Negative value check
-            if(item.Count <= 0)
-            {
-                Console.WriteLine("Значение должно быть больше нуля!"); //Я потом более красиво это оформлю, пока что так для проверки оставим
+            if (item is null)
                 return;
-            }
+
+            bool isIncreaseExisting = false;
 
             //Existency check
-            if(items.Select(x => x.Name).Contains(item.Name))
+            if (items.Select(x => x.Name).Contains(item.Name))
             {
-                added = true;
+                isIncreaseExisting = true;
             }
 
-            //Если новый
             using (StreamWriter writer = new(path, true))
             {
                 writer.WriteLine($"{item.Name};{item.Count};{item.IsDeleting}"); //Здесь ; используется как separator
-                if (added)
+                if (isIncreaseExisting)
                     ConsoleLog.ItemMessageLog($"Добавлено {item.Count}шт к {item.Name}");
                 else
                     ConsoleLog.ItemMessageLog($"{item.Name} добавлен в количестве {item.Count}шт");
@@ -83,9 +78,20 @@ namespace SondorApp
 
         public static void TakeItems(Item inputItem)
         {
-            LoadItems();
+            //LoadItems();
 
-            Item target = items.Where(x => x.Name == inputItem.Name).First();
+            Item target = null;
+
+            try
+            {
+                target = items.Where(x => x.Name == inputItem.Name).First();
+            }
+            catch (InvalidOperationException)
+            {
+                ConsoleLog.ErrorMessage("Такого продукта нет!");
+                return;
+            }
+
             if(inputItem.Count > target.Count)
             {
                 ConsoleLog.ErrorMessage("Столько нет на складе!");
@@ -120,9 +126,18 @@ namespace SondorApp
 
         public static void DeleteItem(string itemName)
         {
-            //LoadItems();
+            Item target = null;
 
-            Item target = items.Where(x => x.Name == itemName).First();
+            try
+            {
+                target = items.Where(x => x.Name == itemName).First();
+            }
+            catch (InvalidOperationException)
+            {
+                ConsoleLog.ErrorMessage("Такого продукта нет!");
+                return;
+            }
+
             target.IsDeleting = true;
             items.Remove(target);
 
@@ -130,6 +145,10 @@ namespace SondorApp
             {
                 writer.WriteLine($"{target.Name};{target.Count};{target.IsDeleting}");
             }
+
+            ConsoleLog.ItemMessageLog($"Продукт {target.Name} удален.");
+
+            LoadItems();
         }
 
         /// <summary>
