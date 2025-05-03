@@ -21,8 +21,8 @@ namespace SondorApp
             Console.WriteLine("> 1 - добавить элементы на склад.");
             Console.WriteLine("> 2 - взять элементы со склада.");
             Console.WriteLine("> 3 - удалить элемент со склада.");
-            Console.WriteLine("> 4 - удалить все данные.");
-            Console.WriteLine("> 5 - обновить данные.");
+            Console.WriteLine("> 4 - обновить данные.");
+            Console.WriteLine("> deleteAll - удалить все данные.");
             Console.WriteLine("> quit - выйти.");
             Console.WriteLine();
 

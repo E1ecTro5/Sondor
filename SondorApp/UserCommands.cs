@@ -26,10 +26,10 @@ namespace SondorApp
                     DataManager.DeleteItem(UserItemDeleteRequest());
                     break;
                 case "4":
-                    DataManager.DeleteAllData();
-                    break;
-                case "5":
                     DataManager.LoadItems();
+                    break;
+                case "deleteAll":
+                    DataManager.DeleteAllData();
                     break;
             }
         }
