@@ -30,7 +30,11 @@ namespace SondorApp
                     //check for IsDeleting
                     if (line.Split(";")[2] == "True")
                     {
-                        loaded.Remove(loaded.Where(x => x.Name == line.Split(";")[0]).First());
+                        Item target = loaded.Where(x => x.Name == line.Split(";")[0]).First();
+                        loaded[loaded.IndexOf(target)].Count -= Convert.ToInt32(line.Split(";")[1]);
+
+                        if(loaded[loaded.IndexOf(target)].Count == 0)
+                            loaded.Remove(loaded.Where(x => x.Name == line.Split(";")[0]).First());
                     }
                     //В файле повторяться могут предметы, поэтому тут их объединять буду; файл как историю добавления/удаления можно использовать
                     else if (loaded.Select(x => x.Name).Contains(itemName))
@@ -75,6 +79,29 @@ namespace SondorApp
             }
 
             LoadItems();
+        }
+
+        public static void TakeItems(Item inputItem)
+        {
+            LoadItems();
+
+            Item target = items.Where(x => x.Name == inputItem.Name).First();
+            if(inputItem.Count > target.Count)
+            {
+                ConsoleLog.ErrorMessage("Столько нет на складе!");
+                return;
+            }
+
+            int index = items.IndexOf(target);
+            target.Count -= inputItem.Count;
+            items[index] = target;
+
+            using (StreamWriter writer = new(path, true))
+            {
+                writer.WriteLine($"{inputItem.Name};{inputItem.Count};True");
+            }
+
+            ConsoleLog.ItemMessageLog($"Взято {inputItem.Count}шт {inputItem.Name} со склада.");
         }
 
         public static void GetData()

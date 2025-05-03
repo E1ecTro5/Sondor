@@ -19,7 +19,8 @@ namespace SondorApp
                     DataManager.AddItem(UserItemAddRequest());
                     break;
                 case "2":
-                    ConsoleLog.ErrorMessage("Я не реализовал это пока-что))");
+                    DataManager.TakeItems(UserItemAddRequest());
+                    //ConsoleLog.ErrorMessage("Я не реализовал это пока-что))");
                     break;
                 case "3":
                     DataManager.DeleteItem(UserItemDeleteRequest());
