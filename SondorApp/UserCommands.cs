@@ -28,6 +28,9 @@ namespace SondorApp
                 case "4":
                     DataManager.LoadItems();
                     break;
+                case "getAll":
+                    DataManager.GetAllHistory();
+                    break;
                 case "deleteAll":
                     DataManager.DeleteAllData();
                     break;
