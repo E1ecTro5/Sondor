@@ -26,9 +26,10 @@ namespace SondorApp
 
                     string itemName = line.Split(";")[0];
                     int itemCount = Convert.ToInt32(line.Split(";")[1]); // Исключения не обработал тут, при AddItem проверять буду наверное..
+                    DateTime transactionTime = Convert.ToDateTime(line.Split(";")[2]);
 
                     //check for IsDeleting
-                    if (line.Split(";")[2] == "True")
+                    if (line.Split(";")[3] == "True")
                     {
                         Item target = loaded.Where(x => x.Name == line.Split(";")[0]).First();
                         loaded[loaded.IndexOf(target)].Count -= Convert.ToInt32(line.Split(";")[1]);
@@ -40,11 +41,11 @@ namespace SondorApp
                     else if (loaded.Select(x => x.Name).Contains(itemName))
                     {
                         Item previous = loaded.Where(x => x.Name == itemName).First();
-                        Item change = new Item(itemName, previous.Count + itemCount);
+                        Item change = new Item(itemName, previous.Count + itemCount, previous.TransactionTime);
                         loaded[loaded.IndexOf(previous)] = change;
                     }
                     else
-                        loaded.Add(new Item(itemName, itemCount));
+                        loaded.Add(new Item(itemName, itemCount, transactionTime));
                 }
             }
 
@@ -66,7 +67,7 @@ namespace SondorApp
 
             using (StreamWriter writer = new(path, true))
             {
-                writer.WriteLine($"{item.Name};{item.Count};{item.IsDeleting}"); //Здесь ; используется как separator
+                writer.WriteLine($"{item.Name};{item.Count};{item.TransactionTime};{item.IsDeleting}"); //Здесь ; используется как separator
                 if (isIncreaseExisting)
                     ConsoleLog.ItemMessageLog($"Добавлено {item.Count}шт к {item.Name}");
                 else
@@ -104,7 +105,7 @@ namespace SondorApp
 
             using (StreamWriter writer = new(path, true))
             {
-                writer.WriteLine($"{inputItem.Name};{inputItem.Count};True");
+                writer.WriteLine($"{inputItem.Name};{inputItem.Count};{DateTime.Now};True");
             }
 
             ConsoleLog.ItemMessageLog($"Взято {inputItem.Count}шт {inputItem.Name} со склада.");
@@ -115,13 +116,74 @@ namespace SondorApp
             LoadItems();
 
             //Получилось костыльно, но зато работает :) И да, тут всё в хардкоде, неадеюсь не убьёте за такое))
-            Console.WriteLine("+" + new string('-', 29) + "+");
-            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " |");
+            Console.WriteLine("+" + new string('-', 29) + "+" + new string('-', 20) + "+");
+            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " | " + "Дата появления".PadRight(19) + "|");
             for (int i = 0; i < items.Count; i++)
             {
-                Console.Write("| " + items[i].Name.PadRight(16, '.') + "|" + items[i].Count.ToString().PadLeft(10, '.') + " |\n");
+                Console.Write("| " + items[i].Name.PadRight(16, '.') + "|" + items[i].Count.ToString().PadLeft(10, '.') + " | " + items[i].TransactionTime.ToString().PadRight(19) + "|\n");
             }
-            Console.WriteLine("+" + new string('-', 29) + "+");
+            Console.WriteLine("+" + new string('-', 29) + "+" + new string('-', 20) + "+");
+        }
+
+        public static void GetAllHistory()
+        {
+            //LoadItems(); это тут не сработает
+            //List<string> transactions = new List<string>();
+
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " | " + "Дата транзакции".PadRight(18) + " | " + "Тип транзакции".PadRight(18) + " |");
+
+            using (StreamReader reader = new(path))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    string[] itemInfo = line.Split(";"); //Надо было и в других методах так сделать для удобства.
+
+                    string itemName = itemInfo[0];
+                    string itemCount = itemInfo[1];
+                    string itemTransactionTime = itemInfo[2];
+                    string itemTransactionType = itemInfo[3];
+                    if (itemTransactionType == "True")
+                        itemTransactionType = "Убавление";
+                    else
+                        itemTransactionType = "Добавление";
+
+                    Console.WriteLine($"| {itemName.PadRight(15)} | {itemCount.PadLeft(9)} | {itemTransactionTime.PadRight(18)} | {itemTransactionType.PadRight(18)} |");
+                }
+            }
+
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+        }
+
+        public static void GetItemHistory(string targetName)
+        {
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+
+            using (StreamReader reader = new(path))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    string[] itemInfo = line.Split(";");
+
+                    string itemName = itemInfo[0];
+                    if (itemName != targetName)
+                        continue;
+
+                    string itemCount = itemInfo[1];
+                    string itemTransactionTime = itemInfo[2];
+                    string itemTransactionType = itemInfo[3];
+                    if (itemTransactionType == "True")
+                        itemTransactionType = "Убавление";
+                    else
+                        itemTransactionType = "Добавление";
+
+                    Console.WriteLine($"| {itemName.PadRight(15)} | {itemCount.PadLeft(9)} | {itemTransactionTime.PadRight(18)} | {itemTransactionType.PadRight(18)} |");
+                }
+            }
+
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
         }
 
         public static void DeleteItem(string itemName)
@@ -143,7 +205,7 @@ namespace SondorApp
 
             using (StreamWriter writer = new(path, true))
             {
-                writer.WriteLine($"{target.Name};{target.Count};{target.IsDeleting}");
+                writer.WriteLine($"{target.Name};{target.Count};{DateTime.Now};{target.IsDeleting}");
             }
 
             ConsoleLog.ItemMessageLog($"Продукт {target.Name} удален.");

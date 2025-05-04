@@ -28,6 +28,12 @@ namespace SondorApp
                 case "4":
                     DataManager.LoadItems();
                     break;
+                case "getItemHistory":
+                    DataManager.GetItemHistory(UserItemDeleteRequest());
+                    break;
+                case "getAll":
+                    DataManager.GetAllHistory();
+                    break;
                 case "deleteAll":
                     DataManager.DeleteAllData();
                     break;
@@ -68,7 +74,7 @@ namespace SondorApp
                 return null;
             }
 
-            Item result = new Item(name, count);
+            Item result = new Item(name, count, DateTime.Now);
             return result;
         }
 

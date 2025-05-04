@@ -8,15 +8,17 @@ namespace SondorApp
 {
     public class Item
     {
-        public Item(string name, int count, bool isDeleting = false)
+        public Item(string name, int count, DateTime trasnactionTime,bool isDeleting = false)
         {
             Name = name;
             Count = count;
+            TransactionTime = trasnactionTime;
             IsDeleting = isDeleting;
         }
 
         public string Name { get; set; }
         public int Count { get; set; }
+        public DateTime TransactionTime { get; set; }
         public bool IsDeleting { get; set; }
     }
 }
