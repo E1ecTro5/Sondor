@@ -68,7 +68,7 @@ namespace SondorApp
                 return null;
             }
 
-            Item result = new Item(name, count);
+            Item result = new Item(name, count, DateTime.Now);
             return result;
         }
 
