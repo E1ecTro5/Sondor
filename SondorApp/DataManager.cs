@@ -130,8 +130,8 @@ namespace SondorApp
             //LoadItems(); это тут не сработает
             //List<string> transactions = new List<string>();
 
-            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
-            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " | " + "Дата транзакции".PadRight(18) + " | " + "Тип транзакции".PadRight(18) + " |");
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 21) + "+" + new string('-', 20) + "+");
+            Console.WriteLine("| Название товара".PadRight(18) + "|" + " Кол-во".PadLeft(10) + " | " + "Дата транзакции".PadRight(19) + " | " + "Тип транзакции".PadRight(18) + " |");
 
             using (StreamReader reader = new(path))
             {
@@ -153,7 +153,7 @@ namespace SondorApp
                 }
             }
 
-            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 21) + "+" + new string('-', 20) + "+");
         }
 
         public static void GetItemHistory(string targetName)

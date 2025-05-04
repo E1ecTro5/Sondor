@@ -10,28 +10,38 @@ namespace SondorApp
     {
         public static void GetCommand(string userInput)
         {
+            Console.Clear();
+            ConsoleLog.ChooseOperation();
+            Console.WriteLine();
+
             switch (userInput)
             {
                 case "0":
+                    Console.WriteLine("Каталог всех продуктов:\n");
                     DataManager.GetData();
                     break;
                 case "1":
+                    Console.WriteLine("Выбрано добавление продукта:\n");
                     DataManager.AddItem(UserItemAddRequest());
                     break;
                 case "2":
+                    Console.WriteLine("Выбрано взятие продуктов:\n");
                     DataManager.TakeItems(UserItemAddRequest());
-                    //ConsoleLog.ErrorMessage("Я не реализовал это пока-что))");
                     break;
                 case "3":
+                    Console.WriteLine("Выбрано удаление продукта:\n");
                     DataManager.DeleteItem(UserItemDeleteRequest());
                     break;
                 case "4":
+                    Console.WriteLine("Предметы обновлены.");
                     DataManager.LoadItems();
                     break;
                 case "getItemHistory":
+                    Console.WriteLine("История транзакций продукта на складе:\n");
                     DataManager.GetItemHistory(UserItemDeleteRequest());
                     break;
                 case "getAll":
+                    Console.WriteLine("История транзакций на складе.\n");
                     DataManager.GetAllHistory();
                     break;
                 case "deleteAll":

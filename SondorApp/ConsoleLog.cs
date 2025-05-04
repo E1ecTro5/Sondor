@@ -15,6 +15,12 @@ namespace SondorApp
             Console.WriteLine("> Пожалуйста, выбреите операцию: ");
             
             Console.WriteLine();
+
+            ChooseOperation();
+        }
+
+        public static void ChooseOperation()
+        {
             Console.ForegroundColor = ConsoleColor.Blue;
 
             Console.WriteLine("> 0 - получить инфрмацию о всех продуктах на складе.");
@@ -35,16 +41,18 @@ namespace SondorApp
         public static void LoadingLog()
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Clear();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Console.WriteLine("Loading" + new string('.', i));
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Loaded");
-            Console.WriteLine();
+            Thread.Sleep(1000);
+            Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.White;
         }
