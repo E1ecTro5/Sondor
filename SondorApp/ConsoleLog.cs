@@ -22,7 +22,9 @@ namespace SondorApp
             Console.WriteLine("> 2 - взять элементы со склада.");
             Console.WriteLine("> 3 - удалить элемент со склада.");
             Console.WriteLine("> 4 - обновить данные.");
-            Console.WriteLine("> deleteAll - удалить все данные.");
+            Console.WriteLine("> getItemHistory - история транзакций предмета.");
+            Console.WriteLine("> getAll - вся история транзакций.");
+            Console.WriteLine("> deleteAll - удалить все данные. (история также будет удалена)");
             Console.WriteLine("> quit - выйти.");
             Console.WriteLine();
 

@@ -149,7 +149,37 @@ namespace SondorApp
                     else
                         itemTransactionType = "Добавление";
 
-                        Console.WriteLine($"| {itemName.PadRight(15)} | {itemCount.PadLeft(9)} | {itemTransactionTime.PadRight(18)} | {itemTransactionType.PadRight(18)} |");
+                    Console.WriteLine($"| {itemName.PadRight(15)} | {itemCount.PadLeft(9)} | {itemTransactionTime.PadRight(18)} | {itemTransactionType.PadRight(18)} |");
+                }
+            }
+
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+        }
+
+        public static void GetItemHistory(string targetName)
+        {
+            Console.WriteLine("+" + new string('-', 17) + "+" + new string('-', 11) + "+" + new string('-', 20) + "+" + new string('-', 20) + "+");
+
+            using (StreamReader reader = new(path))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    string[] itemInfo = line.Split(";");
+
+                    string itemName = itemInfo[0];
+                    if (itemName != targetName)
+                        continue;
+
+                    string itemCount = itemInfo[1];
+                    string itemTransactionTime = itemInfo[2];
+                    string itemTransactionType = itemInfo[3];
+                    if (itemTransactionType == "True")
+                        itemTransactionType = "Убавление";
+                    else
+                        itemTransactionType = "Добавление";
+
+                    Console.WriteLine($"| {itemName.PadRight(15)} | {itemCount.PadLeft(9)} | {itemTransactionTime.PadRight(18)} | {itemTransactionType.PadRight(18)} |");
                 }
             }
 
